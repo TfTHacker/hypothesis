@@ -1,0 +1,1 @@
+[Roam42](https://roam42.com) SmartBlocks for working with [Hypothes.is](https://hypothes.is) annotations. For more information on these SmartBlocks, please see the [official documenation](https://roamresearch.com/#/app/roamhacker/page/sbLVGfgDI)
