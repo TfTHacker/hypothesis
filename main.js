@@ -75,19 +75,19 @@
   }  
   
   rhHypothesis.getAllAnnotations = async (articleUrl)=> {
-	const searchUrl = `search?order=asc&uri=${encodeURI(articleUrl)}`;
+	const searchUrl = `search?order=asc&uri=${encodeURIComponent(articleUrl)}`;
 	const results = await apiHTTPGet(`${apiUrl}${searchUrl}`);
     return await apiAnnotationSimplify(results);
   }
 
   rhHypothesis.getMyAnnotations = async (articleUrl)=> {
-	const searchUrl = `search?user=${rhHypothesis.userProfile.userid}&order=asc&uri=${encodeURI(articleUrl)}`;
+	const searchUrl = `search?user=${rhHypothesis.userProfile.userid}&order=asc&uri=${encodeURIComponent(articleUrl)}`;
 	const results = await apiHTTPGet(`${apiUrl}${searchUrl}`);
     return await apiAnnotationSimplify(results);
   }
 
   rhHypothesis.getAnnotationsSinceDateWithTags = async (fromDate,tags)=> {
-	const searchUrl = `search?tags=${encodeURI(tags)}&user=${rhHypothesis.userProfile.userid}&sort=updated&order=asc&search_after=${fromDate}`;
+	const searchUrl = `search?tags=${encodeURIComponent(tags)}&user=${rhHypothesis.userProfile.userid}&sort=updated&order=asc&search_after=${fromDate}`;
 	const results = await apiHTTPGet(`${apiUrl}${searchUrl}`); 
     console.log(results)
     return await apiAnnotationSimplify(results);
@@ -117,8 +117,6 @@
     if (roam42.keyevents) {
       clearInterval(interval);
 	  	roam42.loader.addScriptToPage('linkifyjs', 'https://cdn.jsdelivr.net/npm/linkifyjs@2.1.9/dist/linkify.min.js');      
-			roam42.loader.addScriptToPage( 'rhHypSmartBlocks', 	'https://hypothesis.roamhacker.repl.co/smartblocks.js');
-
       await initialize();
     }
     if(loadingCounter>20) { clearInterval(interval) } else {loadingCounter += 1}; 
