@@ -17,7 +17,37 @@
     const settings = { "url": apiCall, "method": "GET", "async": false, 
                       "headers": { "Authorization": "Bearer " + rhHypothesis.userToken} };
     return $.ajax(settings).done((response) => response);
-  }  
+  } 
+
+  const paginatedAPIGet = async (
+    baseURL,
+    response_length = 200,
+    data = null,
+    count = 0
+  ) => {
+    const url = `${baseURL}&sort=updated&order=asc&limit=${response_length}&offset=${
+      count * response_length
+    }`;
+    const settings = {
+      url: `${url}`,
+      method: "GET",
+      async: false,
+      headers: { Authorization: "Bearer " + rhHypothesis.userToken },
+    };
+    return $.ajax(settings).done((response) => {
+      if (data === null){
+        data = response
+      }
+      else {
+        data.rows = data.rows.concat(response.rows)   
+      }
+      if (data.rows.length < response.total) {
+        paginatedAPIGet(baseURL, response_length, data, count + 1);
+      } else {
+        data;
+      }
+    });
+  };
   
   const formatHighlightBasedOnTemplate = (template,highlight,url) =>{
     return template.replace('HIGHLIGHT', highlight.trim())
@@ -82,7 +112,7 @@
 
   rhHypothesis.getMyAnnotations = async (articleUrl)=> {
 	const searchUrl = `search?user=${rhHypothesis.userProfile.userid}&order=asc&uri=${encodeURIComponent(articleUrl)}`;
-	const results = await apiHTTPGet(`${apiUrl}${searchUrl}`);
+	const results = await paginatedAPIGet(`${apiUrl}${searchUrl}`, 50);
     return await apiAnnotationSimplify(results);
   }
 
